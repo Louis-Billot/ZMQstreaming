@@ -139,3 +139,6 @@ dmypy.json
 *.xml
 *.mapping
 *.names
+
+*.h265
+*.h264
