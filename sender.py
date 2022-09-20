@@ -40,6 +40,8 @@ xoutLeft.input.setBlocking(False)
 xoutLeft.input.setQueueSize(1)
 xoutRight.input.setBlocking(False)
 xoutRight.input.setQueueSize(1)
+xoutRgb.input.setBlocking(False)
+xoutRgb.input.setQueueSize(1)
 
 sysLog.setRate(2)
 videoEncoder.setDefaultProfilePreset(camRgb.getFps(), dai.VideoEncoderProperties.Profile.MJPEG)
@@ -51,6 +53,7 @@ monoLeft.out.link(xoutLeft.input)
 sysLog.out.link(xoutSysInfo.input)
 videoEncoder.bitstream.link(xoutJPG.input)
 # camRgb.video.link(videoEncoder.input)
+camRgb.video.link(xoutRgb.input)
 
 # address = "tcp://192.168.137.1:5454"
 address = "tcp://localhost:5454"
@@ -69,11 +72,13 @@ with dai.Device(pipeline) as device:
     # Output queues will be used to get the grayscale frames from the outputs defined above
     qLeft = device.getOutputQueue(name="left", maxSize=4, blocking=False)
     qRight = device.getOutputQueue(name="right", maxSize=4, blocking=False)
+    qRgb = device.getOutputQueue(name="rgb", maxSize=4, blocking=False)
 
     while True:
         # Instead of get (blocking), we use tryGet (non-blocking) which will return the available data or None otherwise
         inLeft = qLeft.tryGet()
         inRight = qRight.tryGet()
+        inRgb = qRgb.tryGet()
 
         if inLeft is not None:
             # cv2.imshow("left", inLeft.getCvFrame())
@@ -82,6 +87,10 @@ with dai.Device(pipeline) as device:
         if inRight is not None:
             # cv2.imshow("right", inRight.getCvFrame())
             socket.send_array(inRight.getCvFrame(), msg="right", copy=False)
+        
+        if inRgb is not None:
+            # cv2.imshow("right", inRight.getCvFrame())
+            socket.send_array(inRgb.getCvFrame(), msg="rgb", copy=False)
 
         # if cv2.waitKey(1) == ord('q'):
         #     break
