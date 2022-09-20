@@ -58,9 +58,12 @@ with dai.Device(pipeline) as dev:
     print('Usb speed: ', dev.getUsbSpeed().name)
 
     # Output queues will be used to get the encoded data from the outputs defined above
-    outQ1 = dev.getOutputQueue(name='ve1Out', maxSize=30, blocking=True)
-    outQ2 = dev.getOutputQueue(name='ve2Out', maxSize=30, blocking=True)
-    outQ3 = dev.getOutputQueue(name='ve3Out', maxSize=30, blocking=True)
+    outQ1 = dev.getOutputQueue(name='ve1Out', maxSize=4, blocking=False)
+    outQ2 = dev.getOutputQueue(name='ve2Out', maxSize=4, blocking=False)
+    outQ3 = dev.getOutputQueue(name='ve3Out', maxSize=4, blocking=False)
+    # outQ1 = dev.getOutputQueue(name='ve1Out', maxSize=30, blocking=True)
+    # outQ2 = dev.getOutputQueue(name='ve2Out', maxSize=30, blocking=True)
+    # outQ3 = dev.getOutputQueue(name='ve3Out', maxSize=30, blocking=True)
 
     while True:
         inLeft = outQ1.tryGet()
