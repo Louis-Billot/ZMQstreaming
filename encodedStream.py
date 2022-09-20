@@ -44,8 +44,8 @@ ve1.bitstream.link(ve1Out.input)
 ve2.bitstream.link(ve2Out.input)
 ve3.bitstream.link(ve3Out.input)
 
-# address = "tcp://192.168.137.1:5454"
-address = "tcp://localhost:5454"
+address = "tcp://192.168.137.1:5454"
+# address = "tcp://localhost:5454"
 
 context = imagezmq.SerializingContext()
 socket = context.socket(zmq.PUB)
